@@ -50,7 +50,7 @@ model_plot <- ggplot(kinetic_data, aes(S, v)) +
 capture.output(file = "data/model_summary_nls.txt", model_sum)
 
 # 6.3 Kinetic report
-write.csv(kin_report, "data/kinetic_report_nls.csv")
+write.csv(kin_report, "data/kinetic_report_nls.csv", row.names = FALSE)
 
 # 6.4 Plot
 ggsave("graphs/kinetic_plot_nls.jpeg", model_plot)

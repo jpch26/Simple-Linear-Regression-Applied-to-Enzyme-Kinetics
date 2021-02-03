@@ -68,13 +68,13 @@ model_plot <- ggplot(kinetic_data, aes(S_i, v_i)) +
 # 6 Save results --------------------------------------------------------
 
 # 6.1 Data transformations
-write.csv(kinetic_data, "data/kinetic_data_trans.csv")
+write.csv(kinetic_data, "data/kinetic_data_trans.csv", row.names = FALSE)
 
 # 6.2 Model summary
 capture.output(file = "data/model_summary.txt", model_sum)
 
 # 6.3 Kinetic report
-write.csv(kin_report, "data/kinetic_report.csv")
+write.csv(kin_report, "data/kinetic_report.csv", row.names = FALSE)
 
 # 6.4 Plot
 ggsave("graphs/kinetic_plot.jpeg", model_plot)
