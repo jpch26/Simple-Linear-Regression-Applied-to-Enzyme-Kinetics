@@ -222,7 +222,7 @@ v (M/min)
 </table>
 
 The substrate units are
-<a href="https://en.wikipedia.org/wiki/Molar_concentration "target="_blank">molarity</a>
+<a href="https://en.wikipedia.org/wiki/Molar_concentration" target="_blank">molarity</a>
 expressed simply as M (mol/L), and the velocity units are molarity over
 minute since you are measuring the change in the substrate concentration
 per time unit.
