@@ -39,17 +39,13 @@ By the way, you can see that the numbers are expressed as , e.g., 8.0e-6. This i
 
 The Michelis-Menten equation describes the reaction velocity as a function of the substrate concentration:  
 
-```math
-v = Vmax\frac{[S]}{Km + [S]} \quad \textrm{(1)}
-``` 
+![](images/equation 1.png)
 
 ## Solution
 
 A regular approach to obtain Vmax and Km is to convert the Michaelis-Menten equation into a "linear form" like:  
 
-$$
-\frac{1}{v} = \frac{Km}{Vmax}\frac{1}{[S]} + \frac{1}{Vmax} \quad \textrm{(2)}
-$$
+![](images/equation 2.png)
 
 Once you obtained your experimental data the next step is to fit a linear model using data transformations (the velocity and the substrate concentration inverse), then take the model coefficients and perform simple calculations to obtain the constants.  
 
