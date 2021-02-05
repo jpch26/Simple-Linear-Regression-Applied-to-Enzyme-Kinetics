@@ -39,9 +39,9 @@ By the way, you can see that the numbers are expressed as , e.g., 8.0e-6. This i
 
 The Michelis-Menten equation describes the reaction velocity as a function of the substrate concentration:  
 
-$$
+```math
 v = Vmax\frac{[S]}{Km + [S]} \quad \textrm{(1)}
-$$
+``` 
 
 ## Solution
 

@@ -234,9 +234,9 @@ the previous number can be read as 8.0x10<sup>-6</sup>.
 The Michelis-Menten equation describes the reaction velocity as a
 function of the substrate concentration:
 
-\[
+``` math
 v = Vmax\frac{[S]}{Km + [S]} \quad \textrm{(1)}
-\]
+```
 
 ## Solution
 
