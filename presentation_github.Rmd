@@ -4,7 +4,7 @@ output: github_document
 always_allow_html: true
 ---
 
-A R tutorial about how to perform a simple linear regression analysis applied to a enzyme kinetics experiment. It also explore an alternative nonlinear regression approach.   
+A R tutorial about how to perform a simple linear regression analysis applied to an enzyme kinetics experiment. It also explore an alternative approach by nonlinear regression.
 
 Note that I did not explain how I simulated the experimental data, but you can see the code on data_simulation.R  
 
@@ -33,7 +33,7 @@ data <- kableExtra::kbl(data, digits = 10, col.names = c("S (M)", "v (M/min)"))
 kableExtra::kable_classic_2(data, full_width = FALSE)
 ```
 
-The substrate units are <a href="https://en.wikipedia.org/wiki/Molar_concentration"target="_blank">molarity</a> expressed simply as M (mol/L), and the velocity units are molarity over minute since you are measuring the change in the substrate concentration per time unit.  
+The substrate units are <a href="https://en.wikipedia.org/wiki/Molar_concentration "target="_blank">molarity</a> expressed simply as M (mol/L), and the velocity units are molarity over minute since you are measuring the change in the substrate concentration per time unit.  
 
 By the way, you can see that the numbers are expressed as , e.g., 8.0e-6. This is the way that R uses to represent scientific notation, so the previous number can be read as 8.0x10^-6^.
 

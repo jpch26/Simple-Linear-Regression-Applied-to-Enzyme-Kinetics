@@ -2,8 +2,8 @@ R in the Lab: Simple Linear Regression Applied to Enzyme Kinetics
 ================
 
 A R tutorial about how to perform a simple linear regression analysis
-applied to a enzyme kinetics experiment. It also explore an alternative
-nonlinear regression approach.
+applied to an enzyme kinetics experiment. It also explore an alternative
+approach by nonlinear regression.
 
 Note that I did not explain how I simulated the experimental data, but
 you can see the code on data\_simulation.R
@@ -222,7 +222,7 @@ v (M/min)
 </table>
 
 The substrate units are
-<a href="https://en.wikipedia.org/wiki/Molar_concentration"target="_blank">molarity</a>
+<a href="https://en.wikipedia.org/wiki/Molar_concentration "target="_blank">molarity</a>
 expressed simply as M (mol/L), and the velocity units are molarity over
 minute since you are measuring the change in the substrate concentration
 per time unit.
