@@ -17,12 +17,19 @@ kinetic_data <- kinetic_data %>%
     v_i = 1/v
     )
 
+# 2.1 Save data transformations
+write.csv(kinetic_data, "data/kinetic_data_trans.csv", row.names = FALSE)
+
 # 3 Fitting linear model -------------------------------------------------
 
+# 3.1 Fit linear model 
 model_lm <- lm(v_i ~ S_i, data = kinetic_data)
 
-# 3.1 Model summary
+# 3.2 Model summary
 model_sum <- summary(model_lm)
+
+# 3.3 Model summary
+capture.output(file = "data/model_summary.txt", model_sum)
 
 # 4 Results report -------------------------------------------------------
 
@@ -45,15 +52,19 @@ kcat_km <- kcat / km
 # 4.6 Make a data frame with the results
 kin_report <- data.frame(
   Vmax = v_max,
-  Km   = km,
+  Km   = signif(km, 2),
   Enz  = enz,
-  kcat = kcat,
-  kcat_Km = kcat_km 
+  kcat = signif(kcat, 2),
+  kcat_Km = signif(kcat_km, 2) 
 )
+
+# 4.7 Kinetic report
+write.csv(kin_report, "data/kinetic_report.csv", row.names = FALSE)
 
 # 5 Plot for transformed data and linear model -------------------------------
 
-model_plot <- ggplot(kinetic_data, aes(S_i, v_i)) +
+# 5.1 Make the plot usin ggplot2
+model_plot_lm <- ggplot(kinetic_data, aes(S_i, v_i)) +
   geom_point() +
   geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
   xlab("1/[S] (1/M)") +
@@ -65,16 +76,5 @@ model_plot <- ggplot(kinetic_data, aes(S_i, v_i)) +
     axis.title = element_text(color = "black", size = 15)
   )
 
-# 6 Save results --------------------------------------------------------
-
-# 6.1 Data transformations
-write.csv(kinetic_data, "data/kinetic_data_trans.csv", row.names = FALSE)
-
-# 6.2 Model summary
-capture.output(file = "data/model_summary.txt", model_sum)
-
-# 6.3 Kinetic report
-write.csv(kin_report, "data/kinetic_report.csv", row.names = FALSE)
-
-# 6.4 Plot
-ggsave("graphs/kinetic_plot.jpeg", model_plot)
+# 5.2 Save Plot
+ggsave("graphs/kinetic_plot.jpeg", model_plot_lm)

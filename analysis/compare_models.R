@@ -39,8 +39,3 @@ sum_res_prom_nlm <- sum(squared_res_nlm) / (nrow(data)-length(coef(model_nlm)))
 # 3.4 RSME for non linear model
 rsme_nlm <- sqrt(sum_res_prom_nlm)
 
-# F test for squared residuals ---------------------------------------------
-
-f_test <- var.test(squared_res_lm, squared_res_nlm)
-capture.output(f_test, file = "data/models_f_test.txt")
-
