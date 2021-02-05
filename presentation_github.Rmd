@@ -1,0 +1,397 @@
+---
+title: "R in the Lab: Simple Linear Regression Applied to Enzyme Kinetics"
+output: github_document
+always_allow_html: true
+---
+
+A R tutorial about how to perform a simple linear regression analysis applied to a enzyme kinetics experiment. It also explore an alternative nonlinear regression approach.   
+
+Note that I did not explain how I simulated the experimental data, but you can see the code on data_simulation.R  
+
+If you have cloned this repository and want to run this analysis from scratch first run erase_all_outputs.R script and then run Main.R script o whichever script you want.  
+
+The image and README_files folders contain images that I’ve used on this presentation.  
+
+## Problem
+
+You have performed a <a href="https://en.wikipedia.org/wiki/Enzyme_kinetics" target="_blank">enzyme kinetics</a> experiment. You are supposing a <a href="https://www.ncbi.nlm.nih.gov/books/NBK22430/" target="_blank">Michaelis-Menten</a> kinetics and your aim is to determine the constants Vmax, Km and some other related.  
+
+![](images/enzyme_experiment.jpg)
+The first ten observations in your data would look like this:  
+
+```{r kinetic data, echo=FALSE}
+data <- read.csv("data/kinetic_data.csv")
+data <- head(data, 10)
+data$v <- signif(data$v, 2)
+data <- kableExtra::kbl(data, digits = 10, col.names = c("S (M)", "v (M/min)"))
+kableExtra::kable_classic_2(data, full_width = FALSE)
+```
+
+The substrate units are <a href="https://en.wikipedia.org/wiki/Molar_concentration"target="_blank">molarity</a> expressed simply as M (mol/L), and the velocity units are molarity over minute since you are measuring the change in the substrate concentration per time unit.  
+
+By the way, you can see that the numbers are expressed as , e.g., 8.0e-6. This is the way that R uses to represent scientific notation, so the previous number can be read as 8.0x10^-6^.
+
+The Michelis-Menten equation describes the reaction velocity as a function of the substrate concentration:  
+
+$$
+v = Vmax\frac{[S]}{Km + [S]} \quad \textrm{(1)}
+$$
+
+## Solution
+
+A regular approach to obtain Vmax and Km is to convert the Michaelis-Menten equation into a "linear form" like:  
+
+$$
+\frac{1}{v} = \frac{Km}{Vmax}\frac{1}{[S]} + \frac{1}{Vmax} \quad \textrm{(2)}
+$$
+
+Once you obtained your experimental data the next step is to fit a linear model using data transformations (the velocity and the substrate concentration inverse), then take the model coefficients and perform simple calculations to obtain the constants.  
+
+Let's do this and a nice plot. I also want to show you an alternative approach that not require a linear transformation and, hence, not any data transformations.  
+
+As always, in the first place I need to show you how I have organized my analysis project:  
+
+![](images/files_organization.png)
+
+* The analysis folder contains all my R scripts.  
+* The data folder contains the experimental data and all CSV and TXT files products of my analysis scripts.  
+* The graph folder contains all the plots results of my analysis scripts.  
+
+These three folders are contained in a main folder that can be named as, e.g., "enzyme_experiment", or you can specified the date of your analysis like "enzime_experiment_4FEB2021".    
+
+### Linear regression  
+
+The R analysis script for this analysis:  
+
+```{r linear regression script, code=readLines("analysis/linear_regression.R"), message=FALSE, warning=FALSE}
+
+```
+
+The next code checks if the necessary packages are already loaded and, if they don't, then loaded them.  
+
+```{r check packages, eval=FALSE}
+# Packages 
+if (!"ggplot2" %in% .packages()) library(ggplot2)
+if (!"dplyr" %in% .packages()) library(dplyr)
+```
+
+You can omit the if statement while working on your own.  
+
+Then, I imported the experimental data and performed a data transformation using the `dplyr` function `mutate()`:  
+
+```{r import and tranform the data, eval=FALSE}
+# 1 Import data -----------------------------------------------------------
+
+kinetic_data <- read.csv("data/kinetic_data.csv")
+
+# 2 Data transformations ---------------------------------------------------
+
+kinetic_data <- kinetic_data %>% 
+  mutate(
+    S_i = 1/S,
+    v_i = 1/v
+    )
+```
+
+The transformation was simply the inverse of both the concentration and the velocity reaction. The following table shows you the first ten rows of the previous data.  
+
+```{r transformed data, echo=FALSE}
+kin_data_kbl <- kableExtra::kbl(head(kinetic_data, 10), digits = 10)
+kableExtra::kable_classic_2(kin_data_kbl, full_width=FALSE)
+```
+
+Next, I fit the linear model on the transformed data following the linear relation which I showed you previously (equation 2):  
+
+```{r}
+# 3 Fitting linear model -------------------------------------------------
+
+# 3.1 Fit linear model 
+model_lm <- lm(v_i ~ S_i, data = kinetic_data)
+
+# 3.2 Model summary
+model_sum <- summary(model_lm)
+
+# 3.3 Model summary
+capture.output(file = "data/model_summary.txt", model_sum)
+```
+
+I made a nice summary using the function `summary()`. You can type `model_sum`to see these results (or look for the "model_summary.txt" file in the data folder):  
+
+```{r model summary}
+model_sum
+```
+
+In the fourth step, I calculated the Vmax and Km constants, and using the enzyme concentration in the experiment I also calculated the constants kcat and kcat/Km that can be useful in you results discussion. I put all these constants into a data frame and saved it in the data folder as a CSV file ("kinetic_report.csv").  
+
+```{r km and Vmax calculus, eval=FALSE}
+# 4 Results report -------------------------------------------------------
+
+# 4.1 Obtain the model coefficients 
+model_coeff <- coef(model_lm)
+
+# 4.2 Calculate Vmax
+v_max <- unname(model_coeff[1]^-1)
+
+# 4.3 Calculate km 
+km <- unname(model_coeff[2] * v_max)
+
+# 4.4 Enzyme concentration
+enz = 4.5e-8
+
+# 4.5 Calculate kcat and kcat/km 
+kcat <- v_max /enz
+kcat_km <- kcat / km
+
+# 4.6 Make a data frame with the results
+kin_report <- data.frame(
+  Vmax = v_max,
+  Km   = signif(km, 2),
+  Enz  = enz,
+  kcat = signif(kcat, 2),
+  kcat_Km = signif(kcat_km, 2) 
+)
+
+# 4.7 Kinetic report
+write.csv(kin_report, "data/kinetic_report.csv", row.names = FALSE)
+```
+
+The results are these:  
+
+```{r kinetic report lm, echo=FALSE}
+kin_report_lm <- kableExtra::kbl(kin_report, digits = 10)
+kin_report_lm <- kableExtra::kable_classic_2(kin_report_lm, full_width=FALSE)
+```
+
+```{r show kinetic report lm}
+kin_report_lm
+```
+
+To calculate Vmax and Km firstly I took the model coefficients:  
+
+```{r linear model coefficients}
+coef(model_lm)
+```
+From equation 2 the coefficients are $(Intercept) = 1/Vmax$ and $S_i = Km/Vmax$ (the slope of the line).  
+
+Finally I also plotted the transformed data and represented the fitted model as a blue line. For this I used the `ggplot2` package.  
+
+```{r linear model plot, eval=FALSE}
+# 5 Plot for transformed data and linear model -------------------------------
+
+# 5.1 Make the plot usin ggplot2
+model_plot_lm <- ggplot(kinetic_data, aes(S_i, v_i)) +
+  geom_point() +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
+  xlab("1/[S] (1/M)") +
+  ylab("1/v (min/M)") +
+  theme_classic() +
+  theme(
+    axis.text.x = element_text(color = "black", size = 13),
+    axis.text.y = element_text(color = "black", size = 13),
+    axis.title = element_text(color = "black", size = 15)
+  )
+
+# 5.2 Save Plot
+ggsave("graphs/kinetic_plot.jpeg", model_plot)
+```
+I saved this plot as "kinetic_plot.jpeg" in my graph folder.  
+
+```{r show linear model plot}
+model_plot_lm
+```
+
+### Nonlinear Regression Analysis
+
+Instead of transforming the equation 1 into a linear form, we can obtain the constants in a straight way using the function `nls()`.  
+
+```{r non linear model script, code=readLines("analysis/non_linear_regression.R"), message=FALSE, warning=FALSE}
+
+```
+
+The steps I followed were similar than those in the linear model script. First, I checked and loaded the necessary packages, I imported the data and in the second step I fitted the non linear model:  
+
+```{r fit non linear model, eval=FALSE}
+# 2 Fitting non linear model -------------------------------------------------
+
+# 2.1 Fit non linear model
+model_nls <- nls(
+  v ~ (Vmax * S)/(Km + S), 
+  data = kinetic_data, 
+  start = c(Vmax = 0.01, Km = 0)
+)
+
+# 2.2 Model summary
+model_sum_nls <- summary(model_nls)
+
+# 2.3 Save model summary
+capture.output(file = "data/model_summary_nls.txt", model_sum_nls)
+```
+
+Note that I specified the model as the equation 1 (`v ~ (Vmax * S)/(Km + S)`). The function `nls()` also needs start values for both coefficients. You can see more information about this functions by typing `?nls`.  
+
+I saved the results in my data folder as "model_summary_nls.txt". You can simply type `model_sum_nls` to see this summary:   
+
+```{r nlm summary}
+model_sum_nls
+```
+
+As you can see, this is straight way to obtain the Vmax and Km constants.  
+
+On the third step I made a data frame with all the results and saved it as "kinetic_report_nls.csv" in my data folder:  
+
+```{r}
+# 3 Kinetic report ---------------------------------------------------------
+
+# 3.1 Enzyme concentration (M)
+enz <- 4.5e-8
+
+# 3.2 Model coefficients
+coeffs_nls <- unname(coef(model_nls))
+
+# 3.3 Calculate kcat and kcat/km 
+kcat <- coeffs_nls[1]/enz
+kcat_km <- kcat / coeffs_nls[2]
+
+# 3.4 Make a data frame with the results
+kin_report_nls <- data.frame(
+  Vmax = signif(coeffs_nls[1], 2), 
+  Km = signif(coeffs_nls[2], 2),
+  Enz = enz, 
+  kcat = signif(kcat, 2), 
+  kcat_km = signif(kcat_km, 2)
+  )
+
+# 3.5 Save kinetic report
+write.csv(kin_report_nls, "data/kinetic_report_nls.csv", row.names = FALSE)
+```
+
+This is the table with all the calculated constants:  
+
+```{r kin report nls, echo=FALSE}
+kin_report_nls_kbl <- kableExtra::kbl(kin_report_nls, digits = 10)
+kin_report_nls_kbl <- kableExtra::kable_classic_2(kin_report_nls_kbl, full_width=FALSE)
+```
+```{r show kin report nls, echo=FALSE}
+kin_report_nls_kbl
+```
+
+If you compare this table with the obtained in the linear regression section you will notice that there are not big differences. Later I will compare both methods taking into consideration their prediction performance.  
+
+Finally I made a plot using the data and represented the non linear model as a blue line, note that this way allow us to represent a model completely related to the original data.  
+
+```{r make nls plot, eval=FALSE}
+# 4 Plot for transformed data and linear model -------------------------------
+
+# 4.1 Make plot with ggplot2
+model_plot_nls <- ggplot(kinetic_data, aes(S, v)) +
+  geom_point() +
+  geom_smooth(method = "nls", se = FALSE, formula = y ~ a*x/(b+x),
+              method.args = list(start = c(a = 0.01, b = 0))) +
+  xlab("[S] (M)") +
+  ylab("v (M/min)") +
+  theme_classic() +
+  theme(
+    axis.text.x = element_text(color = "black", size = 13),
+    axis.text.y = element_text(color = "black", size = 13),
+    axis.title = element_text(color = "black", size = 15)
+  )
+
+# 4.2 Save plot
+ggsave("graphs/kinetic_plot_nls.jpeg", model_plot_nls)
+```
+
+In the function `geom_smooth()` I designated the `method`, the `formula` and the `method.args` arguments. This was similar to the code where I fitted the non linear model using the function `nls()`. 
+
+```{r model plot nls}
+model_plot_nls
+```
+
+I saved this plot in my graph folder as "kinetic_plot_nls.jpeg".  
+
+### Comparing both Methods
+
+First, we can simply compare the tables with the constant results.
+
+Results from the linear regression approach:
+
+```{r constants for linear model, echo=FALSE}
+kin_report_lm
+```
+
+Results from the nonlinear regression approach:
+
+```{r constants for non linear model, echo=FALSE}
+kin_report_nls_kbl 
+```
+
+Yeah, there is no a big difference, but what would you think if I tell you that the real values for Vmax and Km are exactly those obtained in the nonlinear regression? I mean, I stated these values when I simulated the experimental data.  
+
+Other way to compare the models is by determining how good they are to make predictions, namely, how far the reaction velocity predictions are from the experimental values?  
+
+I made this evaluation with the next script:  
+
+```{r comparison script, code=readLines("analysis/compare_models.R"), warning=FALSE, message=FALSE}
+
+```
+
+In both cases I fitted the model. In the linear model I had to transform the predictions to the original units with the code:  
+
+```{r tranfor predictions linear model, eval=FALSE}
+# 2.2 Predicted values for linear model
+predicts_lm <- predict(model_lm) 
+predicts_lm <- predicts_lm^-1
+```
+
+Remember, to fit the linear model I've used the equation 2, so firstly I transformed the substrate concentrations and the reaction velocity data. 
+
+Next, I calculated the residuals (real value - predicted value), I squared these values, added them up, and divided by the degrees of freedom to obtain an average of these deviations.  
+
+```{r linear model residuals, eval=FALSE}
+# 2.3 Average sum of squared residuals
+squared_res_lm <- (data$v - predicts_lm) ^ 2
+sum_res_prom_lm <- sum(squared_res_lm) / (nrow(data)-length(coef(model_lm)))
+```
+
+The residual standard error or RMSE is the square root of the previous value, so we have a measurement of the average deviations in the original response units.  
+
+```{r linear model rsme, eval=FALSE}
+# 2.4 RSME for linear model
+rsme_lm <- sqrt(sum_res_prom_lm)
+```
+
+I followed the same pattern for the nonlinear regression:  
+
+```{r non linear model rsme, eval=FALSE}
+# 3.1 Fit non linear model
+model_nlm <- model_nls <- nls(
+  v ~ (Vmax * S)/(Km + S), 
+  data = kinetic_data, 
+  start = c(Vmax = 0.01, Km = 0)
+)
+
+# 3.2 Predicted values for non linear model 
+predicts_nlm <- predict(model_nlm)
+
+# 3.3 Average sum of squared residuals
+squared_res_nlm <- (data$v - predicts_nlm) ^ 2
+sum_res_prom_nlm <- sum(squared_res_nlm) / (nrow(data)-length(coef(model_nlm)))
+
+# 3.4 RSME for non linear model
+rsme_nlm <- sqrt(sum_res_prom_nlm)
+```
+
+I must point out that you can see the residual standard error by looking at each model summary, but for more clarity I decided to show you the way you can calculate it, besides the residuals for the lineal fitting were not in the original velocity data units.  
+
+To compare both RSME you can simply divide them:  
+
+```{r rsme divition}
+rsme_lm / rsme_nlm
+```
+
+So we can conclude that both models have a similar performance estimating reaction velocity values. Anyway, I think that the nonlinear regression is a better approach since offer a straight way to estimate Vmax and Km without any data transformation.  
+
+That's it! You can clone the repository with the code and results of this R tutorial, including the experimental data simulation:
+
+<a href="https://github.com/jpch26/Simple-Linear-Regression-Applied-to-Enzyme-Kinetics" target="_blank">Simple Linear Regression Applied to Enzyme Kinetics</a>
+
+Try to reproduce the analysis step by step, modify or improve the code. It’s all yours!
