@@ -6,7 +6,7 @@ Parameters:
 Vmax 8.038e-09  7.324e-11  109.75   <2e-16 ***
 Km   4.037e-05  1.291e-06   31.26   <2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Residual standard error: 1.525e-10 on 61 degrees of freedom
 
