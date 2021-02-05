@@ -12,6 +12,12 @@ If you have cloned this repository and want to run this analysis from scratch fi
 
 The image and README_files folders contain images that I’ve used on this presentation.  
 
+Juan Pablo Carreón Hidalgo  
+
+jpch_26@outlook.com  
+
+&nbsp;  
+
 ## Problem
 
 You have performed a <a href="https://en.wikipedia.org/wiki/Enzyme_kinetics" target="_blank">enzyme kinetics</a> experiment. You are supposing a <a href="https://www.ncbi.nlm.nih.gov/books/NBK22430/" target="_blank">Michaelis-Menten</a> kinetics and your aim is to determine the constants Vmax, Km and some other related.  

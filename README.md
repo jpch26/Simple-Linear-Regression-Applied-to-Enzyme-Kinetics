@@ -15,6 +15,12 @@ script o whichever script you want.
 The image and README\_files folders contain images that I’ve used on
 this presentation.
 
+Juan Pablo Carreón Hidalgo
+
+<jpch_26@outlook.com>
+
+ 
+
 ## Problem
 
 You have performed a
