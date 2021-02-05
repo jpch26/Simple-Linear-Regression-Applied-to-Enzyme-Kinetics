@@ -1,0 +1,37 @@
+R version 4.0.3 (2020-10-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19041)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=Spanish_Mexico.1252 
+[2] LC_CTYPE=Spanish_Mexico.1252   
+[3] LC_MONETARY=Spanish_Mexico.1252
+[4] LC_NUMERIC=C                   
+[5] LC_TIME=Spanish_Mexico.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets 
+[6] methods   base     
+
+other attached packages:
+[1] dplyr_1.0.2   ggplot2_3.3.2
+
+loaded via a namespace (and not attached):
+ [1] highr_0.8         pillar_1.4.7      compiler_4.0.3   
+ [4] tools_4.0.3       digest_0.6.27     viridisLite_0.3.0
+ [7] evaluate_0.14     lifecycle_0.2.0   tibble_3.0.4     
+[10] nlme_3.1-149      gtable_0.3.0      lattice_0.20-41  
+[13] mgcv_1.8-33       pkgconfig_2.0.3   rlang_0.4.7      
+[16] Matrix_1.2-18     rstudioapi_0.13   yaml_2.2.1       
+[19] xfun_0.19         kableExtra_1.3.1  xml2_1.3.2       
+[22] httr_1.4.2        withr_2.3.0       stringr_1.4.0    
+[25] knitr_1.30        generics_0.1.0    vctrs_0.3.6      
+[28] webshot_0.5.2     grid_4.0.3        tidyselect_1.1.0 
+[31] glue_1.4.2        R6_2.5.0          rmarkdown_2.6    
+[34] purrr_0.3.4       farver_2.0.3      magrittr_2.0.1   
+[37] scales_1.1.1      ellipsis_0.3.1    htmltools_0.5.0  
+[40] splines_4.0.3     rvest_0.3.6       colorspace_2.0-0 
+[43] labeling_0.4.2    stringi_1.5.3     munsell_0.5.0    
+[46] crayon_1.3.4     
