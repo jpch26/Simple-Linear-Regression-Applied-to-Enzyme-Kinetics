@@ -19,8 +19,5 @@ source("analysis/non_linear_regression.R")
 # 4 Compare models 
 source("analysis/compare_models.R")
 
-# 5 Source presentation document. You need 'rmarkdown' package
-rmarkdown::render("presentation_github.Rmd", output_file = "README")
-
-# 6 Session info
+# 5 Session info
 capture.output(sessionInfo(), file = "Session_Info.txt")
