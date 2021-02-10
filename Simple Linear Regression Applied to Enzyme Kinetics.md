@@ -214,18 +214,14 @@ the previous number can be read as 8.0x10<sup>-6</sup>.
 The Michelis-Menten equation describes the reaction velocity as a
 function of the substrate concentration:
 
-\[
-v = Vmax\frac{[S]}{Km + [S]} \quad \textrm{(1)}
-\]
+[](images/equation%201.png)
 
 ## Solution
 
 A regular approach to obtain Vmax and Km is to convert the
 Michaelis-Menten equation into a “linear form” like:
 
-\[
-\frac{1}{v} = \frac{Km}{Vmax}\frac{1}{[S]} + \frac{1}{Vmax} \quad \textrm{(2)}
-\]
+[](images/equation%202.png)
 
 Once you obtained your experimental data the next step is to fit a
 linear model using data transformations (the velocity and the substrate
@@ -897,7 +893,7 @@ I saved this plot as “kinetic\_plot.jpeg” in my graph folder.
 model_plot_lm
 ```
 
-![](Simple%20Linear%20Regression%20Applied%20to%20Enzyme%20Kinetics_files/figure-gfm/show%20linear%20model%20plot-1.png)<!-- -->
+![](SIMPLE~1/figure-gfm/show%20linear%20model%20plot-1.png)<!-- -->
 
 ### Nonlinear Regression Analysis
 
@@ -1173,7 +1169,7 @@ fitted the non linear model using the function `nls()`.
 model_plot_nls
 ```
 
-![](Simple%20Linear%20Regression%20Applied%20to%20Enzyme%20Kinetics_files/figure-gfm/model%20plot%20nls-1.png)<!-- -->
+![](SIMPLE~1/figure-gfm/model%20plot%20nls-1.png)<!-- -->
 
 I saved this plot in my graph folder as “kinetic\_plot\_nls.jpeg”.
 
