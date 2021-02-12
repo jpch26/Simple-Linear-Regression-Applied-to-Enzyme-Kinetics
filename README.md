@@ -12,7 +12,7 @@ If you have cloned this repository and want to run this analysis from
 scratch first run erase\_all\_outputs.R script and then run Main.R
 script o whichever script you want.
 
-The image  folder contains images that I’ve used on this presentation: [Simple Linear Regression Applied to Enzyme Kinetics](https://github.com/jpch26/Simple-Linear-Regression-Applied-to-Enzyme-Kinetics/blob/main/Simple%20Linear%20Regression%20Applied%20to%20Enzyme%20Kinetics.md).
+You can read the presentation for this tutorial by clicking on: [Simple Linear Regression Applied to Enzyme Kinetics](https://github.com/jpch26/Simple-Linear-Regression-Applied-to-Enzyme-Kinetics/blob/main/Simple%20Linear%20Regression%20Applied%20to%20Enzyme%20Kinetics.md).
 
 Juan Pablo Carreón Hidalgo
 
