@@ -1,5 +1,5 @@
 
-# Linear regression analysis to enzyme kinetics ------------------------------
+# Nonlinear least squares analysis to enzyme kinetics ------------------------
 
 # Packages 
 if (!"ggplot2" %in% .packages()) library(ggplot2)
